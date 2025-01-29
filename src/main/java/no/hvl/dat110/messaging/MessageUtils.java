@@ -6,43 +6,35 @@ import no.hvl.dat110.TODO;
 
 public class MessageUtils {
 
-	public static final int SEGMENTSIZE = 128;
+    public static final int SEGMENTSIZE = 128;
 
-	public static int MESSAGINGPORT = 8080;
-	public static String MESSAGINGHOST = "localhost";
+    public static int MESSAGINGPORT = 8080;
+    public static String MESSAGINGHOST = "localhost";
 
-	public static byte[] encapsulate(Message message) {
-		
-		byte[] segment = null;
-		byte[] data;
-		
-		// TODO - START
-		
-		// encapulate/encode the payload data of the message and form a segment
-		// according to the segment format for the messaging layer
-		
-		if (true)
-			throw new UnsupportedOperationException(TODO.method());
-			
-		// TODO - END
-		return segment;
-		
-	}
+    public static byte[] encapsulate(Message message) {
+        byte[] data = message.getData();
+        byte[] segment = new byte[128];
 
-	public static Message decapsulate(byte[] segment) {
 
-		Message message = null;
-		
-		// TODO - START
-		// decapsulate segment and put received payload data into a message
-		
-		if (true)
-			throw new UnsupportedOperationException(TODO.method());
-		
-		// TODO - END
-		
-		return message;
-		
-	}
-	
+        segment[0] = (byte) data.length;
+
+        System.arraycopy(data, 0, segment, 1, data.length);
+        return segment;
+    }
+
+    public static Message decapsulate(byte[] segment) {
+
+        Message message = null;
+
+        // TODO - START
+        // decapsulate segment and put received payload data into a message
+
+
+
+        // TODO - END
+
+        return message;
+
+    }
+
 }
