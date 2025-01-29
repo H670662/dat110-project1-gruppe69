@@ -24,17 +24,33 @@ public class MessageUtils {
 
     public static Message decapsulate(byte[] segment) {
 
-        Message message = null;
 
         // TODO - START
         // decapsulate segment and put received payload data into a message
 
+        if(segment == null) {
+            throw new IllegalArgumentException("Segment is null");
+        }
 
+        if(segment.length == 0) {
+            throw new IllegalArgumentException("Segment is empty");
+        }
+        int length = segment[0] & 0xFF;
+
+        if(length > 127) {
+            throw new IllegalArgumentException("Segment is too long");
+        }
+
+        if(segment.length < 1 + length) {
+            throw new IllegalArgumentException("Segment is too short");
+        }
+
+        byte[] data = new byte[length];
+        System.arraycopy(segment, 1, data, 0, length);
+
+        return new Message(data);
 
         // TODO - END
-
-        return message;
-
     }
 
 }
