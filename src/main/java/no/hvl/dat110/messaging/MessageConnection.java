@@ -61,8 +61,10 @@ public class MessageConnection {
 		
 		// TODO - START
 		// read a segment from the input stream and decapsulate data into a Message
+
+		// litt usikker her. hva som skjer uten instream, eller med større enn segmentsize instream
         try {
-            data = inStream.readAllBytes();
+            data = inStream.readNBytes(MessageUtils.SEGMENTSIZE);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
