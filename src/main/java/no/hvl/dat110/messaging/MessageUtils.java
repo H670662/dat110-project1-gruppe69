@@ -35,6 +35,9 @@ public class MessageUtils {
         if(segment.length == 0) {
             throw new IllegalArgumentException("Segment is empty");
         }
+        // & er en Bitwise AND e.g 0101 AND 1011 er 0001
+        // & 0xFF passer på at tall over 127 fortsatt er positive tall
+        // todo, fjerne 0xFF og se om det fortsatt funker siden alt er under 127
         int length = segment[0] & 0xFF;
 
         if(length > 127) {
