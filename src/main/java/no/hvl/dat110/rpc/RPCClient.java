@@ -63,9 +63,16 @@ public class RPCClient {
 		The return value from the RPC call must be decapsulated according to the RPC message format
 
 		*/
+
+		// TODO sjekk om dette funker. meget usikker !!!
+		byte[] encapsulated = RPCUtils.encapsulate(rpcid, param);
+		Message message = new Message(encapsulated);
+		connection.send(message);
+		Message reply = connection.receive();
+		byte[] returnEncapsulated = RPCUtils.decapsulate(reply.getData());
+		returnval = RPCUtils.decapsulate(returnEncapsulated);
 				
-		if (true)
-			throw new UnsupportedOperationException(TODO.method());
+		//throw new UnsupportedOperationException(TODO.method());
 		
 		// TODO - END
 		return returnval;
