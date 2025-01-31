@@ -25,6 +25,7 @@ public class RPCClient {
 		} catch (RuntimeException e) {
 			throw new RuntimeException(e);
 		}
+		// TODO - END
 	}
 	
 	public void disconnect() {
