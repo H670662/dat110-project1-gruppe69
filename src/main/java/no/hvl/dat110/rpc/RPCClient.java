@@ -32,10 +32,14 @@ public class RPCClient {
 		
 		// TODO - START
 		// disconnect by closing the underlying messaging connection
-		
-		if (true)
-			throw new UnsupportedOperationException(TODO.method());
-		
+
+		// Usikker på om dette er riktig men jeg vil anta det
+		try {
+			connection.close();
+		} catch (RuntimeException e) {
+			throw new RuntimeException(e);
+		}
+
 		// TODO - END
 	}
 
