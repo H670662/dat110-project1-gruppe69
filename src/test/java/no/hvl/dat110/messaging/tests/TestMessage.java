@@ -5,10 +5,10 @@ import static org.junit.jupiter.api.Assertions.*;
 import java.util.Arrays;
 
 // import org.junit.Test;
-import org.junit.jupiter.api.Test;
 
 import no.hvl.dat110.messaging.Message;
 import no.hvl.dat110.messaging.MessageUtils;
+import org.junit.jupiter.api.Test;
 
 class TestMessage {
 
