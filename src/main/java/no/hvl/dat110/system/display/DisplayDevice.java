@@ -18,7 +18,7 @@ public class DisplayDevice {
 
 		// TODO - test om dette faktisk fungerer
 		RPCServer displayserver = new RPCServer(Common.DISPLAYPORT);
-		DisplayImpl display = new DisplayImpl((byte)Common.READ_RPCID, displayserver);
+		DisplayImpl display = new DisplayImpl((byte)Common.WRITE_RPCID, displayserver);
 
 		displayserver.run();
 		displayserver.stop();
