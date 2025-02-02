@@ -21,7 +21,7 @@ public class RPCClient {
 		// TODO - START
 		// connect using the RPC client
 		try {
-			msgclient.connect();
+			connection = msgclient.connect();
 		} catch (RuntimeException e) {
 			throw new RuntimeException(e);
 		}
@@ -69,8 +69,8 @@ public class RPCClient {
 		Message message = new Message(encapsulated);
 		connection.send(message);
 		Message reply = connection.receive();
-		byte[] returnEncapsulated = RPCUtils.decapsulate(reply.getData());
-		returnval = RPCUtils.decapsulate(returnEncapsulated);
+		returnval = RPCUtils.decapsulate(reply.getData());
+		//returnval = RPCUtils.decapsulate(returnEncapsulated);
 				
 		//throw new UnsupportedOperationException(TODO.method());
 		

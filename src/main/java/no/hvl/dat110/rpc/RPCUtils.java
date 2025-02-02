@@ -87,10 +87,12 @@ public class RPCUtils {
 		
 		byte[] encoded = null;
 		
-		// TODO - START 
+		// TODO - START
+		// Står ingenting om hva som egt. skal skje
+		//dette er AI's jobbb
+        encoded = new byte[0];
 		
-		if (true)
-			throw new UnsupportedOperationException(TODO.method());
+		//throw new UnsupportedOperationException(TODO.method());
 				
 		// TODO - END
 		
@@ -101,11 +103,11 @@ public class RPCUtils {
 	public static void unmarshallVoid(byte[] data) {
 		
 		// TODO
-
-
-		if (true)
-			throw new UnsupportedOperationException(TODO.method());
-		
+		//forstår ikke hvordan man marshaller void, stjålet fra AI
+		if (data.length != 0) {
+			throw new IllegalArgumentException("Received data is not a void");
+		}
+		//throw new UnsupportedOperationException(TODO.method());
 	}
 
 	// convert boolean to a byte array representation
