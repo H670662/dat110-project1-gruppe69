@@ -82,18 +82,15 @@ public class RPCUtils {
 		
 		return decoded;
 	}
-	
+
 	public static byte[] marshallVoid() {
 		
 		byte[] encoded = null;
 		
-		// TODO - START
-		// Står ingenting om hva som egt. skal skje
-		//dette er AI's jobbb
-        encoded = new byte[0];
-		
-		//throw new UnsupportedOperationException(TODO.method());
-				
+		// TODO - START 
+
+		encoded = new byte[0];
+
 		// TODO - END
 		
 		return encoded;
