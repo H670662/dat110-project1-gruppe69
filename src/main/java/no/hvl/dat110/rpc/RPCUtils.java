@@ -82,16 +82,15 @@ public class RPCUtils {
 		
 		return decoded;
 	}
-	
+
 	public static byte[] marshallVoid() {
 		
 		byte[] encoded = null;
 		
 		// TODO - START 
-		
-		if (true)
-			throw new UnsupportedOperationException(TODO.method());
-				
+
+		encoded = new byte[0];
+
 		// TODO - END
 		
 		return encoded;
