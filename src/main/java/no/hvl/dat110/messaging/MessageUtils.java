@@ -12,6 +12,7 @@ public class MessageUtils {
     public static String MESSAGINGHOST = "localhost";
 
     public static byte[] encapsulate(Message message) {
+        // TODO - START
         byte[] data = message.getData();
         byte[] segment = new byte[128];
 
@@ -20,6 +21,7 @@ public class MessageUtils {
 
         System.arraycopy(data, 0, segment, 1, data.length);
         return segment;
+        // TODO - END
     }
 
     public static Message decapsulate(byte[] segment) {
