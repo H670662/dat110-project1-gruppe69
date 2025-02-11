@@ -1,10 +1,12 @@
 package no.hvl.dat110.rpc;
 
+import java.io.IOException;
 import java.util.HashMap;
 
 import no.hvl.dat110.TODO;
 import no.hvl.dat110.messaging.MessageConnection;
 import no.hvl.dat110.messaging.Message;
+import no.hvl.dat110.messaging.MessageUtils;
 import no.hvl.dat110.messaging.MessagingServer;
 
 public class RPCServer {
@@ -39,27 +41,50 @@ public class RPCServer {
 		while (!stop) {
 	    
 		   byte rpcid = 0;
-		   Message requestmsg, replymsg;
+		   Message requestmsg = null, replymsg = null;
 		   
 		   // TODO - START
 		   // - receive a Message containing an RPC request
-		   // - extract the identifier for the RPC method to be invoked from the RPC request
+            try {
+                requestmsg = connection.receive();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            // - extract the identifier for the RPC method to be invoked from the RPC request
+            assert requestmsg != null;
+            byte[] rpcRequest = requestmsg.getData();
+			rpcid = rpcRequest[0];
+
 		   // - extract the method's parameter by decapsulating using the RPCUtils
+			byte[] rpcParams = RPCUtils.decapsulate(rpcRequest);
+
 		   // - lookup the method to be invoked
+			RPCRemoteImpl rpcService = services.get(rpcid);
+
 		   // - invoke the method and pass the param
-		   // - encapsulate return value 
+			byte[] reply;
+
+			if (rpcService != null) {
+				// Invoke the RPC method with parameters
+				reply = rpcService.invoke(rpcParams);
+			} else {
+				// Return empty response if unknown ID
+				reply = RPCUtils.marshallVoid();
+			}
+
+		   // - encapsulate return value
+			replymsg = new Message(RPCUtils.encapsulate(rpcid, reply));
+
+
 		   // - send back the message containing the RPC reply
-			requestmsg = connection.receive();
-			rpcid = requestmsg.getData()[0];
-            byte[] params = RPCUtils.decapsulate(requestmsg.getData());
-            RPCRemoteImpl method = services.get(rpcid);
-            byte[] result = method.invoke(params);
-            replymsg = new Message(RPCUtils.encapsulate(rpcid, result));
-            connection.send(replymsg);
+            try {
+                connection.send(replymsg);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
 
-			// throw new UnsupportedOperationException(TODO.method());
-
-		   // TODO - END
+            // TODO - END
 
 			// stop the server if it was stop methods that was called
 		   if (rpcid == RPCCommon.RPIDSTOP) {

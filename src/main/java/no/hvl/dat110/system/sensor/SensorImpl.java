@@ -17,7 +17,7 @@ public class SensorImpl extends RPCRemoteImpl {
 
 		long seconds = System.currentTimeMillis();
 
-		double temp = RANGE * Math.sin(seconds / 1000);
+		double temp = RANGE * Math.sin((double) seconds / 1000) * Math.random();
 
 		System.out.println("READ:" + temp);
 		
@@ -26,13 +26,13 @@ public class SensorImpl extends RPCRemoteImpl {
 
 	// called by RPC server on rpc identifier corresponding to read
 	public byte[] invoke(byte[] param) {
-				
+
 		RPCUtils.unmarshallVoid(param);
 		
 		int temp = read();
-				
-		byte[] returnval = RPCUtils.marshallInteger(temp); 
-		
+
+		byte[] returnval = RPCUtils.marshallInteger(temp);
+
 		return returnval;
 	}
 }

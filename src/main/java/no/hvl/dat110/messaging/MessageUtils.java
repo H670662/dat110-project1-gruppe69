@@ -6,56 +6,60 @@ import no.hvl.dat110.TODO;
 
 public class MessageUtils {
 
-    public static final int SEGMENTSIZE = 128;
+	public static final int SEGMENTSIZE = 128;
 
-    public static int MESSAGINGPORT = 8080;
-    public static String MESSAGINGHOST = "localhost";
+	public static int MESSAGINGPORT = 8080;
+	public static String MESSAGINGHOST = "localhost";
 
-    public static byte[] encapsulate(Message message) {
-        // TODO - START
-        byte[] data = message.getData();
-        byte[] segment = new byte[128];
+	public static byte[] encapsulate(Message message) {
+
+		// Check for null input.
+		if(message == null){
+			throw new NullPointerException("Message is null");
+		}
+
+		/*
+			Segment, byte[128], consists of:
+				Header: placed at segment[0]: an int from 0 to 127.
+				Payload data: message data, starts at segment[1] and up to the message length.
+				Padding: the rest of the segment array after the message. null pointers -> be cautious.
+		 */
+
+		// Declares a segment.
+		byte[] segment = new byte[SEGMENTSIZE];
 
 
-        segment[0] = (byte) data.length;
-
-        System.arraycopy(data, 0, segment, 1, data.length);
-        return segment;
-        // TODO - END
-    }
-
-    public static Message decapsulate(byte[] segment) {
+		// Declares elements of segment (header, payload data) based on the input message.
+		byte header = (byte) message.getMessageLength();
+		byte[] data = message.getData();
 
 
-        // TODO - START
-        // decapsulate segment and put received payload data into a message
+		// Assembles the segment with header on segment[0] and payload data starting on segment[1].
+		segment[0] = header;
+		System.arraycopy(data, 0, segment, 1, message.getMessageLength());
 
-        if(segment == null) {
-            throw new IllegalArgumentException("Segment is null");
-        }
 
-        if(segment.length == 0) {
-            throw new IllegalArgumentException("Segment is empty");
-        }
-        // & er en Bitwise AND e.g 0101 AND 1011 er 0001
-        // & 0xFF passer på at tall over 127 fortsatt er positive tall
-        // todo, fjerne 0xFF og se om det fortsatt funker siden alt er under 127
-        int length = segment[0] & 0xFF;
+		// Returns the formatted segment.
+		return segment;
+		
+	}
 
-        if(length > 127) {
-            throw new IllegalArgumentException("Segment is too long");
-        }
+	public static Message decapsulate(byte[] segment) {
 
-        if(segment.length < 1 + length) {
-            throw new IllegalArgumentException("Segment is too short");
-        }
+		//Check for null input.
+		if (segment == null) {
+			throw new NullPointerException("Segment is null");
+		}
 
-        byte[] data = new byte[length];
-        System.arraycopy(segment, 1, data, 0, length);
+		// Creates an array of bytes with length based on the segment header.
+		byte[] data = new byte[segment[0]];
 
-        return new Message(data);
+		// Extracts payload data from the segment.
+		System.arraycopy(segment, 1, data, 0, segment[0]);
 
-        // TODO - END
-    }
-
+		// Creates and returns a message with the data from the input segment.
+		return new Message(data);
+		
+	}
+	
 }

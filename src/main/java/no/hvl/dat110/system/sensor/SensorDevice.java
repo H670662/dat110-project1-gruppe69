@@ -14,6 +14,7 @@ public class SensorDevice {
 		SensorImpl sensor = new SensorImpl((byte)Common.READ_RPCID,sensorserver);
 		
 		sensorserver.run();
+
 		
 		sensorserver.stop();
 		

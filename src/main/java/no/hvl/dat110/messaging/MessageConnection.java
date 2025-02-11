@@ -23,7 +23,7 @@ public class MessageConnection {
 
 			outStream = new DataOutputStream(socket.getOutputStream());
 
-			inStream = new DataInputStream (socket.getInputStream());
+			inStream = new DataInputStream(socket.getInputStream());
 
 		} catch (IOException ex) {
 
@@ -32,51 +32,32 @@ public class MessageConnection {
 		}
 	}
 
-	public void send(Message message) {
+	public void send(Message message) throws IOException {
 
-		byte[] data;
-		
-		// TODO - START
-		// encapsulate the data contained in the Message and write to the output stream
+		// Check for null input
+		if(message == null){
+			throw new NullPointerException("Message is null");
+		}
 
-		data = MessageUtils.encapsulate(message);
-        try {
-            outStream.write(data);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+		//Encapsulating the message
+		byte[] data = MessageUtils.encapsulate(message);
 
-		/*
-		if (true)
-			throw new UnsupportedOperationException(TODO.method());
-			*/
-		// TODO - END
+		//Sending encapsulated message to the destination port
+		outStream.write(data);
+
 
 	}
 
-	public Message receive() {
+	public Message receive() throws IOException {
 
-		Message message = null;
-		byte[] data;
-		
-		// TODO - START
 		// read a segment from the input stream and decapsulate data into a Message
 
-		// litt usikker her. hva som skjer uten instream, eller med større enn segmentsize instream
-        try {
-            data = inStream.readNBytes(MessageUtils.SEGMENTSIZE);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-		message = MessageUtils.decapsulate(data);
+		// Reads the segment from the port and saves it into a buffer
+		byte[] data = new byte[128];
+		inStream.read(data);
 
-/*
-        if (true)
-			throw new UnsupportedOperationException(TODO.method());
-		*/
-		// TODO - END
-		
-		return message;
+		// Decapsulates the data and returns a message
+        return MessageUtils.decapsulate(data);
 		
 	}
 

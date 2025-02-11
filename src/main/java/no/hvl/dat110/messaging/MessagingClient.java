@@ -20,29 +20,16 @@ public class MessagingClient {
 	}
 	
 	// setup of a messaging connection to a messaging server
-	public MessageConnection connect () {
+	public MessageConnection connect () throws IOException {
 
 		// client-side socket for underlying TCP connection to messaging server
-		Socket clientSocket;
+		Socket clientSocket = new Socket(server, port);
 
-		MessageConnection connection = null;
-		
-		// TODO - START
 		// connect to messaging server using a TCP socket
 		// create and return a corresponding messaging connection
-        try {
-            clientSocket = new Socket(server, port);
-			connection = new MessageConnection(clientSocket);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+		MessageConnection connection = new MessageConnection(clientSocket);
 
-/*
-        if (true)
-			throw new UnsupportedOperationException(TODO.method());
-		*/
-		// TODO - END
+
 		return connection;
-
 	}
 }

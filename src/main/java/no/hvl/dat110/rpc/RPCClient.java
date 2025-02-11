@@ -1,7 +1,10 @@
 package no.hvl.dat110.rpc;
 
+import jdk.jfr.Frequency;
 import no.hvl.dat110.TODO;
 import no.hvl.dat110.messaging.*;
+
+import java.io.IOException;
 
 public class RPCClient {
 
@@ -12,19 +15,17 @@ public class RPCClient {
 	private MessageConnection connection;
 	
 	public RPCClient(String server, int port) {
-	
+
 		msgclient = new MessagingClient(server,port);
 	}
 	
-	public void connect() {
+	public void connect() throws IOException {
 		
 		// TODO - START
 		// connect using the RPC client
-		try {
-			connection = msgclient.connect();
-		} catch (RuntimeException e) {
-			throw new RuntimeException(e);
-		}
+
+		connection = msgclient.connect();
+		
 		// TODO - END
 	}
 	
@@ -32,31 +33,26 @@ public class RPCClient {
 		
 		// TODO - START
 		// disconnect by closing the underlying messaging connection
-
-		// Usikker på om dette er riktig men jeg vil anta det
-		try {
-			connection.close();
-		} catch (RuntimeException e) {
-			throw new RuntimeException(e);
-		}
-
+		
+		connection.close();
+		
 		// TODO - END
 	}
 
 	/*
-	 Make a remote call om the method on the RPC server by sending an RPC request message and receive an RPC reply message
+	 Make a remote call on the method on the RPC server by sending an RPC request message and receive an RPC reply message
 
 	 rpcid is the identifier on the server side of the method to be called
 	 param is the marshalled parameter of the method to be called
 	 */
 
 	public byte[] call(byte rpcid, byte[] param) {
-		
-		byte[] returnval = null;
-		
-		// TODO - START
 
-		/*
+        byte[] returnval = null;
+
+        // TODO - START
+
+		/*\
 
 		The rpcid and param must be encapsulated according to the RPC message format
 
@@ -64,19 +60,32 @@ public class RPCClient {
 
 		*/
 
-		// TODO sjekk om dette funker. meget usikker !!!
-		byte[] encapsulated = RPCUtils.encapsulate(rpcid, param);
-		Message message = new Message(encapsulated);
-		connection.send(message);
-		Message reply = connection.receive();
-		returnval = RPCUtils.decapsulate(reply.getData());
-		//returnval = RPCUtils.decapsulate(returnEncapsulated);
-				
-		//throw new UnsupportedOperationException(TODO.method());
-		
-		// TODO - END
-		return returnval;
-		
-	}
+        // 1. Encapsulating the message.
+        byte[] requestEncapsulated = RPCUtils.encapsulate(rpcid, param);
+        Message requestMessage = new Message(requestEncapsulated);
+
+        // 2. Sending encapsulated request message
+        try {
+            connection.send(requestMessage);
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
+
+        // 3. Getting response
+        Message responceMessage;
+        try {
+            responceMessage = connection.receive();
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
+
+		returnval = RPCUtils.decapsulate(responceMessage.getData());
+
+        // TODO - END
+        return returnval;
+
+    }
 
 }
